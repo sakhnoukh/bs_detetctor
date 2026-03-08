@@ -1,9 +1,3 @@
-"""
-Stage 7 — Data Health Report
-
-Reads the final processed splits and generates reports/data_health.md.
-This report directly supports the Week 5 & 6 paper write-up.
-"""
 import sys
 from pathlib import Path
 from collections import Counter
@@ -69,7 +63,6 @@ def source_table(records: list[dict]) -> str:
 def main():
     REPORTS.mkdir(parents=True, exist_ok=True)
 
-    # Load all processed records
     all_records: list[dict] = []
     split_records: dict[str, list[dict]] = {}
     for split in ("train", "dev", "test"):
@@ -81,7 +74,6 @@ def main():
         else:
             split_records[split] = []
 
-    # Stage counts (approximate from interim folders)
     n_normalized = count_jsonl(INTERIM_NORMALIZED)
     n_filtered = count_jsonl(INTERIM_FILTERED)
     n_deduped = count_jsonl(INTERIM_DEDUPED)
@@ -168,7 +160,7 @@ def main():
     report = "\n".join(lines)
     out_path = REPORTS / "data_health.md"
     out_path.write_text(report, encoding="utf-8")
-    print(f"Report written to: {out_path}")
+    print(f"report written to: {out_path}")
 
 
 if __name__ == "__main__":

@@ -1,15 +1,3 @@
-"""
-Stage 4 — Quality Filters
-
-Reads from data/interim/label_mapped/,
-drops low-quality records, logs drop reasons,
-writes to data/interim/filtered/.
-
-Drop rules:
-  1. empty text_clean after normalization
-  2. fewer than 5 whitespace-split tokens
-  3. more than 512 tokens (truncate rather than drop, so we lose no labels)
-"""
 import sys
 from pathlib import Path
 from collections import Counter
@@ -62,20 +50,18 @@ def main():
             if n > MAX_TOKENS:
                 r["text_clean"] = truncate(text, MAX_TOKENS)
                 drop_reasons["truncated"] += 1
-                # still keep it
 
             kept.append(r)
 
-        out_path = FILTERED / path.name
-        write_jsonl(kept, out_path)
+        write_jsonl(kept, FILTERED / path.name)
         total_out += len(kept)
 
     dropped = total_in - total_out
-    print(f"\nStage 4 complete.")
-    print(f"  Input:   {total_in:,}")
-    print(f"  Kept:    {total_out:,}")
-    print(f"  Dropped: {dropped:,}")
-    print("\nDrop/action breakdown:")
+    print(f"\nstage 4 complete.")
+    print(f"  input:   {total_in:,}")
+    print(f"  kept:    {total_out:,}")
+    print(f"  dropped: {dropped:,}")
+    print("\ndrop/action breakdown:")
     for reason, cnt in sorted(drop_reasons.items()):
         print(f"  {reason:15s}  {cnt:5d}")
 

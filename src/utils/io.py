@@ -1,6 +1,3 @@
-"""
-I/O utilities: read/write JSONL files.
-"""
 import json
 from pathlib import Path
 
