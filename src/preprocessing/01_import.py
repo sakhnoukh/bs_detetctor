@@ -1,8 +1,7 @@
 import sys
-from pathlib import Path
-
-import pandas as pd
+import csv
 import json
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
@@ -19,27 +18,32 @@ def _logic_label(raw: str) -> str:
 
 def import_logic(domain: str, split: str) -> list[dict]:
     path = RAW / "logic" / f"{domain}_{split}.csv"
-    df = pd.read_csv(path)
-
     # edu uses "updated_label"; climate uses "logical_fallacies"
-    label_col = "updated_label" if "updated_label" in df.columns else "logical_fallacies"
+    label_col = "updated_label" if domain == "edu" else "logical_fallacies"
 
     records = []
-    for i, row in df.iterrows():
-        text = str(row["source_article"]).strip()
-        label = _logic_label(str(row[label_col]))
-        records.append({
-            "id": f"logic_{domain}_{split}_{i}",
-            "source": f"logic_{domain}",
-            "text_raw": text,
-            "text_clean": "",
-            "label_fine": label,
-            "label_coarse": "",
-            "meta": {
-                "domain": domain,
-                "original_split": split,
-            },
-        })
+    with open(path, encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        if reader.fieldnames and label_col not in reader.fieldnames:
+            fallback = "logical_fallacies" if label_col == "updated_label" else "updated_label"
+            if fallback in reader.fieldnames:
+                label_col = fallback
+
+        for i, row in enumerate(reader):
+            text = str(row.get("source_article", "")).strip()
+            label = _logic_label(str(row.get(label_col, "")))
+            records.append({
+                "id": f"logic_{domain}_{split}_{i}",
+                "source": f"logic_{domain}",
+                "text_raw": text,
+                "text_clean": "",
+                "label_fine": label,
+                "label_coarse": "",
+                "meta": {
+                    "domain": domain,
+                    "original_split": split,
+                },
+            })
     return records
 
 

@@ -67,7 +67,8 @@ def coarse(label_fine: str) -> str:
 def main():
     MAPPED.mkdir(parents=True, exist_ok=True)
 
-    unmapped_counter: Counter = Counter()
+    explicit_other_counter: Counter = Counter()
+    fallback_other_counter: Counter = Counter()
     total = 0
 
     for path in sorted(NORMALIZED.glob("*.jsonl")):
@@ -75,9 +76,13 @@ def main():
         for r in records:
             raw = r["label_fine"]
             source = r["source"]
+            mapping = SOURCE_MAPS.get(source, {})
             mapped = map_label(raw, source)
             if mapped == "other":
-                unmapped_counter[(source, raw)] += 1
+                if raw in mapping:
+                    explicit_other_counter[(source, raw)] += 1
+                else:
+                    fallback_other_counter[(source, raw)] += 1
             r["label_fine"] = mapped
             r["label_coarse"] = coarse(mapped)
         out_path = MAPPED / path.name
@@ -86,9 +91,14 @@ def main():
 
     print(f"\nstage 3 complete. mapped labels for {total:,} records.")
 
-    if unmapped_counter:
-        print("\nlabels mapped to 'other' (source, raw_label → count):")
-        for (src, lbl), cnt in sorted(unmapped_counter.items()):
+    if explicit_other_counter:
+        print("\nlabels explicitly mapped to 'other' (source, raw_label → count):")
+        for (src, lbl), cnt in sorted(explicit_other_counter.items()):
+            print(f"  {src:20s}  {lbl:30s}  {cnt:5d}")
+
+    if fallback_other_counter:
+        print("\nunknown labels fallback-mapped to 'other' (source, raw_label → count):")
+        for (src, lbl), cnt in sorted(fallback_other_counter.items()):
             print(f"  {src:20s}  {lbl:30s}  {cnt:5d}")
 
 

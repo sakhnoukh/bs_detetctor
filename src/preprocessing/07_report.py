@@ -1,4 +1,5 @@
 import sys
+import json
 from pathlib import Path
 from collections import Counter
 from datetime import date
@@ -13,13 +14,22 @@ INTERIM_NORMALIZED = ROOT / "data" / "interim" / "normalized"
 INTERIM_FILTERED = ROOT / "data" / "interim" / "filtered"
 INTERIM_DEDUPED = ROOT / "data" / "interim" / "deduped"
 REPORTS = ROOT / "reports"
+QUALITY_SUMMARY_PATH = REPORTS / "quality_filter_stats.json"
+DEDUP_SUMMARY_PATH = REPORTS / "dedup_stats.json"
 
 
 def count_jsonl(folder: Path, pattern: str = "*.jsonl") -> int:
     total = 0
     for p in folder.glob(pattern):
-        total += sum(1 for line in open(p, encoding="utf-8") if line.strip())
+        with open(p, encoding="utf-8") as f:
+            total += sum(1 for line in f if line.strip())
     return total
+
+
+def load_json(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def text_length_stats(records: list[dict]) -> dict:
@@ -48,6 +58,34 @@ def label_table(records: list[dict]) -> str:
     return "\n".join(rows)
 
 
+def before_after_source_table(before: dict, after: dict) -> str:
+    keys = sorted(set(before) | set(after))
+    rows = [
+        "| Source | Before quality filter | After quality filter | Removed |",
+        "|--------|------------------------|----------------------|---------|",
+    ]
+    total_before = 0
+    total_after = 0
+    for src in keys:
+        b = int(before.get(src, 0))
+        a = int(after.get(src, 0))
+        rows.append(f"| `{src}` | {b:,} | {a:,} | {b - a:,} |")
+        total_before += b
+        total_after += a
+    rows.append(f"| **Total** | **{total_before:,}** | **{total_after:,}** | **{total_before - total_after:,}** |")
+    return "\n".join(rows)
+
+
+def drop_reason_table(drop_reasons: dict) -> str:
+    rows = ["| Reason | Count |", "|--------|-------|"]
+    total = 0
+    for reason, count in sorted(drop_reasons.items()):
+        rows.append(f"| `{reason}` | {int(count):,} |")
+        total += int(count)
+    rows.append(f"| **Total** | **{total:,}** |")
+    return "\n".join(rows)
+
+
 def source_table(records: list[dict]) -> str:
     dist = Counter(r["source"] for r in records)
     total = sum(dist.values())
@@ -62,6 +100,9 @@ def source_table(records: list[dict]) -> str:
 
 def main():
     REPORTS.mkdir(parents=True, exist_ok=True)
+
+    quality_summary = load_json(QUALITY_SUMMARY_PATH)
+    dedup_summary = load_json(DEDUP_SUMMARY_PATH)
 
     all_records: list[dict] = []
     split_records: dict[str, list[dict]] = {}
@@ -78,6 +119,8 @@ def main():
     n_filtered = count_jsonl(INTERIM_FILTERED)
     n_deduped = count_jsonl(INTERIM_DEDUPED)
     n_final = len(all_records)
+    removed_total = n_normalized - n_final
+    removed_pct = (100 * removed_total / n_normalized) if n_normalized else 0.0
 
     stats = text_length_stats(all_records)
     coarse_dist = Counter(r["label_coarse"] for r in all_records)
@@ -98,7 +141,7 @@ def main():
         f"| After deduplication (Stage 5) | {n_deduped:,} |",
         f"| **Final processed total** | **{n_final:,}** |",
         f"",
-        f"Records removed: {n_normalized - n_final:,} ({100*(n_normalized - n_final)/n_normalized:.1f}% of raw)",
+        f"Records removed: {removed_total:,} ({removed_pct:.1f}% of raw)",
         f"",
         f"---",
         f"",
@@ -133,7 +176,53 @@ def main():
         f"",
         f"---",
         f"",
-        f"## 5. Text Length Statistics (tokens, whitespace-split)",
+        f"## 5. Before/After Counts Per Source (Stage 4 quality filter)",
+        f"",
+    ]
+
+    if quality_summary:
+        lines += [
+            before_after_source_table(
+                quality_summary.get("source_counts_before", {}),
+                quality_summary.get("source_counts_after", {}),
+            ),
+            f"",
+            f"### Stage 4 Drop Reason Breakdown",
+            f"",
+            drop_reason_table(quality_summary.get("drop_reasons", {})),
+        ]
+    else:
+        lines += [
+            "_No quality filter summary found. Run `04_quality_filters.py` to include this section._",
+        ]
+
+    lines += [
+        f"",
+        f"---",
+        f"",
+        f"## 6. Deduplication Summary (Stage 5)",
+        f"",
+    ]
+
+    if dedup_summary:
+        lines += [
+            f"- Retention policy: {dedup_summary.get('retention_policy', 'N/A')}",
+            f"- Input records: {dedup_summary.get('total_input', 0):,}",
+            f"- Kept records: {dedup_summary.get('total_kept', 0):,}",
+            f"- Dropped (same file): {dedup_summary.get('drop_same_file', 0):,}",
+            f"- Dropped (cross file): {dedup_summary.get('drop_cross_file', 0):,}",
+            f"- Dropped (cross split): {dedup_summary.get('drop_cross_split', 0):,}",
+        ]
+    else:
+        lines += [
+            "_No dedup summary found. Run `05_deduplicate.py` to include this section._",
+        ]
+
+    lines += [
+        f"",
+        f"---",
+        f"",
+        f"## 7. Text Length Statistics (tokens, whitespace-split)",
         f"",
         f"| Stat | Value |",
         f"|------|-------|",
@@ -144,7 +233,7 @@ def main():
         f"",
         f"---",
         f"",
-        f"## 6. Label Distribution Per Split",
+        f"## 8. Label Distribution Per Split",
         f"",
     ]
 
