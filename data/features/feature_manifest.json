@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-03-12T16:54:18.530411+00:00",
+  "elapsed_seconds": 201.0,
+  "splits": {
+    "train": 7870,
+    "dev": 2040,
+    "test": 1266
+  },
+  "use_context": false,
+  "tfidf": {
+    "word_ngram_range": [
+      1,
+      2
+    ],
+    "char_ngram_range": [
+      3,
+      5
+    ],
+    "max_features": 50000,
+    "min_df": 2,
+    "word_vocab_size": 48971,
+    "char_vocab_size": 50000,
+    "total_dim": 98971
+  },
+  "embedding": {
+    "model": "sentence-transformers/all-MiniLM-L6-v2",
+    "dim": 384,
+    "batch_size": 64
+  },
+  "extra_features": [
+    "num_chars",
+    "num_words",
+    "avg_word_len",
+    "count_excl",
+    "count_quest",
+    "count_comma",
+    "count_period",
+    "negation_count",
+    "discourse_count",
+    "certainty_count",
+    "hedge_count",
+    "second_person_count",
+    "allcaps_ratio",
+    "ner_person",
+    "ner_org",
+    "ner_gpe",
+    "ner_norp"
+  ],
+  "ner_enabled": true,
+  "label_mapping": {
+    "ad_hominem": 0,
+    "appeal_to_authority": 1,
+    "false_cause": 2,
+    "false_dilemma": 3,
+    "hasty_generalization": 4,
+    "none": 5,
+    "other": 6,
+    "slippery_slope": 7,
+    "straw_man": 8
+  },
+  "package_versions": {
+    "scikit-learn": "1.8.0",
+    "sentence-transformers": "5.3.0",
+    "transformers": "5.3.0",
+    "torch": "2.10.0",
+    "spacy": "3.8.11",
+    "scipy": "1.17.1",
+    "numpy": "2.4.3"
+  }
+}

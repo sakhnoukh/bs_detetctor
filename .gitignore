@@ -1,0 +1,41 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Large data artefacts (regenerable)
+data/features/*.npz
+data/features/*.npy
+data/features/ids_*.txt
+data/features/labels_*.npy
+
+# Raw data (not committed — see DATA.md)
+data/raw/
+
+# Interim pipeline outputs (regenerable)
+data/interim/
+
+# Processed data (regenerable from raw + pipeline)
+data/processed/
+
+# Model caches
+*.pt
+*.bin
+*.safetensors
