@@ -97,7 +97,7 @@ def main():
         report_to=[],
     )
 
-    trainer = Trainer(model=model, args=args, tokenizer=tokenizer)
+    trainer = Trainer(model=model, args=args, processing_class=tokenizer)
 
     pred = trainer.predict(ds)
     logits = pred.predictions

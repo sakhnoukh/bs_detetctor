@@ -1,0 +1,37 @@
+{
+  "run_name": "finetune_roberta-base_seed42",
+  "output_dir": "/home/nlp01/bs_detector/models/finetune_roberta-base_seed42",
+  "n_labels": 9,
+  "labels": [
+    "ad_hominem",
+    "appeal_to_authority",
+    "false_cause",
+    "false_dilemma",
+    "hasty_generalization",
+    "none",
+    "other",
+    "slippery_slope",
+    "straw_man"
+  ],
+  "train_runtime_seconds": 138.3236,
+  "dev_metrics": {
+    "eval_loss": 0.8657386302947998,
+    "eval_accuracy": 0.7769607843137255,
+    "eval_f1_macro": 0.6711154938264253,
+    "eval_f1_weighted": 0.7718960142244363,
+    "eval_runtime": 2.5985,
+    "eval_samples_per_second": 785.082,
+    "eval_steps_per_second": 49.26,
+    "epoch": 3.0
+  },
+  "test_metrics": {
+    "eval_loss": 0.9656237959861755,
+    "eval_accuracy": 0.7543443917851501,
+    "eval_f1_macro": 0.6807053037842075,
+    "eval_f1_weighted": 0.749673083635988,
+    "eval_runtime": 1.5288,
+    "eval_samples_per_second": 828.124,
+    "eval_steps_per_second": 52.33,
+    "epoch": 3.0
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "total_input": 11506,
+  "total_kept": 11458,
+  "total_dropped": 48,
+  "drop_reasons": {
+    "empty": 39,
+    "too_short": 9
+  },
+  "source_counts_before": {
+    "cocolofa": 7706,
+    "logic_climate": 1351,
+    "logic_edu": 2449
+  },
+  "source_counts_after": {
+    "cocolofa": 7706,
+    "logic_climate": 1309,
+    "logic_edu": 2443
+  },
+  "per_file": {
+    "cocolofa_dev.jsonl": {
+      "input": 1538,
+      "kept": 1538,
+      "dropped": 0,
+      "empty": 0,
+      "too_short": 0,
+      "truncated": 0
+    },
+    "cocolofa_test.jsonl": {
+      "input": 798,
+      "kept": 798,
+      "dropped": 0,
+      "empty": 0,
+      "too_short": 0,
+      "truncated": 0
+    },
+    "cocolofa_train.jsonl": {
+      "input": 5370,
+      "kept": 5370,
+      "dropped": 0,
+      "empty": 0,
+      "too_short": 0,
+      "truncated": 0
+    },
+    "logic_climate_dev.jsonl": {
+      "input": 277,
+      "kept": 269,
+      "dropped": 8,
+      "empty": 7,
+      "too_short": 1,
+      "truncated": 0
+    },
+    "logic_climate_test.jsonl": {
+      "input": 219,
+      "kept": 211,
+      "dropped": 8,
+      "empty": 8,
+      "too_short": 0,
+      "truncated": 0
+    },
+    "logic_climate_train.jsonl": {
+      "input": 855,
+      "kept": 829,
+      "dropped": 26,
+      "empty": 24,
+      "too_short": 2,
+      "truncated": 0
+    },
+    "logic_edu_dev.jsonl": {
+      "input": 300,
+      "kept": 299,
+      "dropped": 1,
+      "empty": 0,
+      "too_short": 1,
+      "truncated": 0
+    },
+    "logic_edu_test.jsonl": {
+      "input": 300,
+      "kept": 299,
+      "dropped": 1,
+      "empty": 0,
+      "too_short": 1,
+      "truncated": 0
+    },
+    "logic_edu_train.jsonl": {
+      "input": 1849,
+      "kept": 1845,
+      "dropped": 4,
+      "empty": 0,
+      "too_short": 4,
+      "truncated": 0
+    }
+  }
+}

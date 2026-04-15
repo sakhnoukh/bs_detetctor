@@ -1,0 +1,24 @@
+{
+  "labels": [
+    "ad_hominem",
+    "appeal_to_authority",
+    "false_cause",
+    "false_dilemma",
+    "hasty_generalization",
+    "none",
+    "other",
+    "slippery_slope",
+    "straw_man"
+  ],
+  "label2id": {
+    "ad_hominem": 0,
+    "appeal_to_authority": 1,
+    "false_cause": 2,
+    "false_dilemma": 3,
+    "hasty_generalization": 4,
+    "none": 5,
+    "other": 6,
+    "slippery_slope": 7,
+    "straw_man": 8
+  }
+}

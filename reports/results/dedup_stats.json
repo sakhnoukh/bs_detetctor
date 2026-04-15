@@ -1,0 +1,19 @@
+{
+  "total_input": 11458,
+  "total_kept": 11176,
+  "total_dropped": 282,
+  "drop_same_file": 258,
+  "drop_cross_file": 24,
+  "drop_cross_split": 24,
+  "retention_policy": "prefer train > dev > test when duplicate text appears across files",
+  "source_counts_before": {
+    "cocolofa": 7706,
+    "logic_climate": 1309,
+    "logic_edu": 2443
+  },
+  "source_counts_after": {
+    "cocolofa": 7702,
+    "logic_climate": 1071,
+    "logic_edu": 2403
+  }
+}
