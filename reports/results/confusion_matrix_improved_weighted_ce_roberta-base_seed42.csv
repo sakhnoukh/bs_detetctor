@@ -1,0 +1,10 @@
+,ad_hominem,appeal_to_authority,false_cause,false_dilemma,hasty_generalization,none,other,slippery_slope,straw_man
+ad_hominem,38,1,0,3,3,0,6,0,3
+appeal_to_authority,3,64,3,0,1,4,16,0,0
+false_cause,1,1,14,0,1,0,13,0,0
+false_dilemma,0,0,1,52,2,8,3,1,1
+hasty_generalization,4,5,5,6,75,19,26,3,1
+none,1,8,0,8,12,252,27,8,0
+other,5,13,7,4,22,30,371,1,7
+slippery_slope,0,1,0,2,1,9,0,65,0
+straw_man,0,1,0,1,1,0,9,0,13

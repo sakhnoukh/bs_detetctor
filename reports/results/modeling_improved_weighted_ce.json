@@ -1,0 +1,49 @@
+{
+  "run_name": "improved_weighted_ce_roberta-base_seed42",
+  "output_dir": "/home/nlp01/bs_detector/models/improved_weighted_ce_roberta-base_seed42",
+  "loss_type": "weighted_ce",
+  "n_labels": 9,
+  "labels": [
+    "ad_hominem",
+    "appeal_to_authority",
+    "false_cause",
+    "false_dilemma",
+    "hasty_generalization",
+    "none",
+    "other",
+    "slippery_slope",
+    "straw_man"
+  ],
+  "class_weights": {
+    "ad_hominem": 3.179797887802124,
+    "appeal_to_authority": 1.6436926126480103,
+    "false_cause": 4.286492347717285,
+    "false_dilemma": 1.653014063835144,
+    "hasty_generalization": 1.1536206007003784,
+    "none": 0.39729416370391846,
+    "other": 0.3110795021057129,
+    "slippery_slope": 2.0288734436035156,
+    "straw_man": 6.778639316558838
+  },
+  "train_runtime_seconds": 521.8038,
+  "dev_metrics": {
+    "eval_loss": 1.7688684463500977,
+    "eval_accuracy": 0.7803921568627451,
+    "eval_f1_macro": 0.6937554138952725,
+    "eval_f1_weighted": 0.777744986866947,
+    "eval_runtime": 6.1939,
+    "eval_samples_per_second": 329.355,
+    "eval_steps_per_second": 20.665,
+    "epoch": 5.0
+  },
+  "test_metrics": {
+    "eval_loss": 1.7804450988769531,
+    "eval_accuracy": 0.7456556082148499,
+    "eval_f1_macro": 0.6789528292666307,
+    "eval_f1_weighted": 0.7436648008643146,
+    "eval_runtime": 3.6756,
+    "eval_samples_per_second": 344.429,
+    "eval_steps_per_second": 21.765,
+    "epoch": 5.0
+  }
+}
